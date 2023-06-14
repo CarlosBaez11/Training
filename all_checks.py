@@ -44,14 +44,15 @@ def check_root_full():
 
 
 def main():
-    if check_reboot():
-        print('Pending Reboot.')
-        sys.exit(1)
-    if check_root_full():
-        print('Root partition full.')
-        sys.exit(1)
-    print('Everything is Ok!')
-    sys.exit(0)
+    checks=[
+            (check_reboot, "Pending reboot"),
+            (check_root_full, "Root partition full")
+            ]
+
+    for check, msg in checks:
+        if check():
+            print(msg)
+            sys.exit(1)
 main()
 
 
