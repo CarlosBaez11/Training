@@ -2,6 +2,10 @@
 
 import os
 import sys
+import shutil
+import sys
+
+
 
 def check_reboot():
     
@@ -9,11 +13,46 @@ def check_reboot():
     
     return os.path.exist('/run/reboot-required')
 
-def main()
+
+def check_disk_usage(disk, min_gb, min_percent):
+    """Returns True if there is enough free disk space, false other wise."""
+    du=shutil.disk_usage(disk)
+
+    #Calculate the percentage of free space
+
+    percent_free=100*du.free/du.total
+    
+    #Calculate how many gigabytes
+
+    gigabytes_free=du.free/2**30
+    if percent_free < min_percent or gigabytes_free <min_gb:
+        return False
+    return True 
+
+if not check_disk_usage('/', 2, 10):
+    print('ERROR! Not enough disk space.')
+    sys.exit(1)
+print('Everything OK.')
+sys.exit(0)
+
+
+def check_root_full():
+    """Returns True if the root partition is full, False otherwise"""
+    return check_disk_full("/", 2, 10)
+
+
+
+
+def main():
     if check_reboot():
         print('Pending Reboot.')
+        sys.exit(1)
+    if check_root_full():
+        print('Root partition full.')
         sys.exit(1)
     print('Everything is Ok!')
     sys.exit(0)
 main()
+
+
 
