@@ -5,6 +5,17 @@ import sys
 
 import shutil
 import sys
+import socket
+
+
+
+def check_not_network():
+    """"Return True if it fails to resolve Google's URL, False otherwise."""
+    try:
+        socket.gethostbyname("www.google.com")
+        return False 
+    except:
+        return True 
 
 
 
@@ -43,7 +54,8 @@ def check_cpu_constrained():
 def main():
     checks=[
             (check_reboot, "Pending reboot"),
-            (check_root_full, "Root partition full")
+            (check_root_full, "Root partition full"),
+            (check_not_network, "No working network")
             ]
     everything_ok=True
     for check, msg in checks:
