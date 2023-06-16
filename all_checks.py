@@ -43,7 +43,9 @@ sys.exit(0)
 
 
 def check_root_full():
-    """Returns True if the root partition is full, False otherwise"""
+
+    """Returns True if the root partition is full, returns False otherwise"""
+    
     return check_disk_full("/", 2, 10)
 
 
@@ -55,7 +57,7 @@ def main():
     checks=[
             (check_reboot, "Pending reboot"),
             (check_root_full, "Root partition full"),
-            (check_not_network, "No working network")
+            (check_not_network, "There are not working network")
             ]
     everything_ok=True
     for check, msg in checks:
